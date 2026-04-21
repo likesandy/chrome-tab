@@ -6,10 +6,9 @@
   --separator: #81878c;
   --text-active: #3c4043;
   --text-inactive: #5f6368;
-  
+
   width: 100%;
   min-height: 100vh;
-  padding: 24px;
   background-color: #e2e2e2;
   display: flex;
   justify-content: center;
@@ -18,13 +17,12 @@
 
 .chrome-window {
   width: 100%;
-  max-width: 1200px;
   background-color: var(--toolbar-bg);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .chrome-tabs-bar {
@@ -59,7 +57,9 @@
   display: flex;
   align-items: flex-end;
   height: 100%;
-  flex: 0 0 auto;
+  flex: 0 1 120px;
+  min-width: 28px;
+  max-width: 140px;
 
   .chrome-pill {
     height: 20px;
@@ -74,15 +74,21 @@
     justify-content: center;
     padding: 0 10px;
     min-width: 20px;
+    max-width: 100%;
     box-sizing: border-box;
+    overflow: hidden;
 
-    &:hover { filter: brightness(0.95); }
+    &:hover {
+      filter: brightness(0.95);
+    }
 
     .pill-title {
       font-size: 11px;
       font-weight: 500;
       color: #3c4043; // Chrome light theme uses dark text for group pills now
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -93,7 +99,7 @@
     transition: transform 0.1s ease-out;
 
     .chrome-pill {
-       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
   }
 
@@ -125,7 +131,7 @@
   display: flex;
   align-items: flex-end;
   flex: 1 1 0px;
-  min-width: 120px;
+  min-width: 0;
   max-width: 240px;
   container-type: inline-size;
 
@@ -175,7 +181,7 @@
 
   &.is-dragging-overlay {
     background-color: var(--toolbar-bg);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     opacity: 1 !important;
     color: var(--text-active);
@@ -183,8 +189,9 @@
     border-top-right-radius: 8px;
     transform: scale(1.02);
     transition: transform 0.1s ease-out;
-    
-    &::before, &::after {
+
+    &::before,
+    &::after {
       content: '';
       position: absolute;
       bottom: 0;
@@ -210,11 +217,12 @@
       border-top: 2px solid var(--group-color);
       border-left: 2px solid var(--group-color);
       border-right: 2px solid var(--group-color);
-      
+
       &::before {
         border-right: 2px solid var(--group-color);
         border-bottom: 2px solid var(--group-color);
       }
+
       &::after {
         border-left: 2px solid var(--group-color);
         border-bottom: 2px solid var(--group-color);
@@ -236,7 +244,7 @@
 
   &.is-dragging-overlay {
     .connector-line {
-       opacity: 0; // The border-bottom of the feet handles it better in overlay
+      opacity: 0; // The border-bottom of the feet handles it better in overlay
     }
   }
 
@@ -282,7 +290,7 @@
     flex-shrink: 0;
 
     &:hover {
-      background-color: rgba(0,0,0,0.1);
+      background-color: rgba(0, 0, 0, 0.1);
       color: var(--text-active);
     }
   }
@@ -297,27 +305,28 @@
     color: var(--text-active);
     z-index: 15;
     box-sizing: border-box;
-    
+
     // Smooth edges and slight shadow for active tab
-    box-shadow: 0 -1px 2px rgba(0,0,0,0.05);
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.05);
 
     &.is-grouped {
-        // Group specific active style: colorful border
-        border-top: 2px solid var(--group-color);
-        border-left: 2px solid var(--group-color);
-        border-right: 2px solid var(--group-color);
-        z-index: 16;
-    }
-    
-    .connector-line { 
-      display: none;
-    }
-    
-    .close-btn { 
-      opacity: 1; 
+      // Group specific active style: colorful border
+      border-top: 2px solid var(--group-color);
+      border-left: 2px solid var(--group-color);
+      border-right: 2px solid var(--group-color);
+      z-index: 16;
     }
 
-    &::before, &::after {
+    .connector-line {
+      display: none;
+    }
+
+    .close-btn {
+      opacity: 1;
+    }
+
+    &::before,
+    &::after {
       content: '';
       position: absolute;
       bottom: 0;
@@ -344,6 +353,7 @@
         border-right: 2px solid var(--group-color);
         border-bottom: 2px solid var(--group-color);
       }
+
       &::after {
         border-left: 2px solid var(--group-color);
         border-bottom: 2px solid var(--group-color);
@@ -365,7 +375,11 @@
   cursor: pointer;
   transition: background-color 0.2s;
   z-index: 5;
-  &:hover { background-color: rgba(0,0,0,0.08); color: var(--text-active); }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+    color: var(--text-active);
+  }
 }
 
 .chrome-toolbar {
@@ -391,7 +405,10 @@
   font-size: 13px;
   color: var(--text-active);
   border: 1px solid transparent;
-  &:hover { background-color: #e8eaed; }
+
+  &:hover {
+    background-color: #e8eaed;
+  }
 }
 
 .chrome-content {
@@ -409,11 +426,13 @@
     margin-bottom: 24px;
     opacity: 0.2;
   }
+
   h1 {
     font-size: 24px;
     font-weight: 500;
     margin-bottom: 12px;
   }
+
   p {
     font-size: 14px;
     color: var(--text-inactive);
@@ -435,11 +454,12 @@
     padding: 0;
     justify-content: center;
   }
-  
+
   /* In extreme squeeze, the ACTIVE tab should prioritize the close button, hiding favicon */
   .chrome-tab.active .content {
     display: none;
   }
+
   .chrome-tab.active .close-btn {
     margin-left: 0;
     display: flex !important;
@@ -449,8 +469,21 @@
   .chrome-tab:not(.active) .close-btn {
     display: none !important;
   }
+
   .chrome-tab:not(.active) .content {
     justify-content: center;
     gap: 0;
+  }
+}
+
+@container (max-width: 72px) {
+  .chrome-pill {
+    padding: 0 6px;
+  }
+}
+
+@container (max-width: 52px) {
+  .chrome-pill .pill-title {
+    display: none;
   }
 }
