@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { X, ArrowLeft, ArrowRight, RotateCw, Plus, Star } from 'lucide-react';
 import './Tabs.less';
 
@@ -16,6 +16,7 @@ export default function App() {
     purple: true
   });
   const [tabCounter, setTabCounter] = useState(1);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const toggleGroup = (id: string) => {
     setExpandedGroups(prev => ({
@@ -46,6 +47,24 @@ export default function App() {
       ]
     }
   ]);
+
+  useEffect(() => {
+    // Scroll active tab into view whenever selected or added
+    if (scrollAreaRef.current) {
+      const activeEl = scrollAreaRef.current.querySelector('.chrome-tab-wrapper.is-active');
+      if (activeEl) {
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      }
+    }
+  }, [activeTabId, items]);
+
+  const onWheelScroll = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (scrollAreaRef.current) {
+      if (e.deltaY !== 0 && e.deltaX === 0) {
+        scrollAreaRef.current.scrollLeft += e.deltaY;
+      }
+    }
+  };
 
   const addNormalTab = () => {
     const newId = `normal-${tabCounter}`;
@@ -133,7 +152,20 @@ export default function App() {
              <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#27c93f' }}></div>
           </div>
 
-          <div className="chrome-tabs-scroll-area" style={{ display: 'flex', alignItems: 'flex-end', flex: '1 1 auto', overflow: 'hidden', height: '100%' }}>
+          <div 
+            className="chrome-tabs-scroll-area" 
+            ref={scrollAreaRef}
+            onWheel={onWheelScroll}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'flex-end', 
+              flex: '1 1 auto', 
+              overflowX: 'auto', 
+              height: '100%',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none'
+            }}
+          >
             {renderElements.map((el, i) => {
               const isTab = el.type === 'normal-tab' || el.type === 'grouped-tab';
               const isActive = activeTabId === el.id;
@@ -145,9 +177,6 @@ export default function App() {
                   <div key={`pill-${el.id}`} className={`chrome-pill-wrapper ${!el.isExpanded ? 'collapsed' : ''}`} style={{ '--group-color': el.color } as React.CSSProperties}>
                     <div className="chrome-pill" onClick={() => toggleGroup(el.id)}>
                       {el.title && <span className="pill-title">{el.title}</span>}
-                      <div className="group-close-btn" onClick={(e) => removeGroup(e, el.id)}>
-                        <X size={12} strokeWidth={2.5} />
-                      </div>
                     </div>
                     <div className="connector-line" />
                   </div>
