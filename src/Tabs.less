@@ -110,30 +110,36 @@
 .chrome-tab-wrapper {
   position: relative;
   height: 36px;
-  margin-right: 4px;
+  /* Reduced right margin to allow tighter packing like native Chrome */
   display: flex;
   align-items: flex-end;
-  flex: 1 1 16px;
-  min-width: 16px;
+  flex: 1 1 0px;
+  min-width: 18px; /* Minimum width to barely fit the 16px icon and separator */
   max-width: 224px;
   container-type: inline-size;
 
   &.is-active {
-    min-width: 40px;
+    min-width: 48px; /* Room for active tab's close button */
+    z-index: 10;
   }
 
-  &:last-child {
-    margin-right: 0;
+  &:hover {
+    z-index: 9;
   }
 
   .separator {
     position: absolute;
-    right: -2px;
+    right: 0px;
     top: 10px;
     width: 1px;
     height: 16px;
     background-color: var(--separator);
     z-index: 5;
+  }
+
+  &.is-active .separator,
+  &.next-is-active .separator {
+    opacity: 0;
   }
 
   &.last-in-group .chrome-tab .connector-line {
@@ -345,10 +351,22 @@
     padding: 0;
     justify-content: center;
   }
-  .chrome-tab .content {
+  
+  /* In extreme squeeze, the ACTIVE tab should prioritize the close button, hiding favicon */
+  .chrome-tab.active .content {
     display: none;
   }
-  .chrome-tab .close-btn {
+  .chrome-tab.active .close-btn {
     margin-left: 0;
+    display: flex !important;
+  }
+
+  /* INACTIVE tabs should prioritize the favicon */
+  .chrome-tab:not(.active) .close-btn {
+    display: none !important;
+  }
+  .chrome-tab:not(.active) .content {
+    justify-content: center;
+    gap: 0;
   }
 }
