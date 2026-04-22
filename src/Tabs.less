@@ -11,7 +11,6 @@
   min-height: 100vh;
   padding: 24px;
   background-color: #e2e2e2;
-  display: flex;
   justify-content: center;
   align-items: flex-start;
 }
@@ -59,7 +58,8 @@
   display: flex;
   align-items: flex-end;
   height: 100%;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
+  min-width: 32px;
 
   .chrome-pill {
     height: 20px;
@@ -73,7 +73,8 @@
     align-items: center;
     justify-content: center;
     padding: 0 10px;
-    min-width: 20px;
+    min-width: 24px;
+    max-width: 100%;
     box-sizing: border-box;
 
     &:hover { filter: brightness(0.95); }
@@ -81,20 +82,17 @@
     .pill-title {
       font-size: 11px;
       font-weight: 500;
-      color: #3c4043; // Chrome light theme uses dark text for group pills now
+      color: #3c4043;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
   &.is-dragging-overlay {
     z-index: 1000;
     opacity: 1 !important;
-    transform: scale(1.05);
-    transition: transform 0.1s ease-out;
-
-    .chrome-pill {
-       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
+    /* Removed transform scale and box-shadow to prevent vertical popping */
   }
 
   .connector-line {
@@ -125,7 +123,7 @@
   display: flex;
   align-items: flex-end;
   flex: 1 1 0px;
-  min-width: 120px;
+  min-width: 36px;
   max-width: 240px;
   container-type: inline-size;
 
@@ -175,15 +173,14 @@
 
   &.is-dragging-overlay {
     background-color: var(--toolbar-bg);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.2);
+    /* box-shadow: 0 8px 16px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.2); REMOVED: Breaks alignment with toolabr */
     z-index: 1000;
     opacity: 1 !important;
     color: var(--text-active);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    transform: scale(1.02);
-    transition: transform 0.1s ease-out;
-    
+    /* Removed transform scale and transition so feet align completely flush with bottom toolbar */
+
     &::before, &::after {
       content: '';
       position: absolute;
@@ -207,6 +204,7 @@
     }
 
     &.is-grouped {
+      // Group specific active style: colorful border
       border-top: 2px solid var(--group-color);
       border-left: 2px solid var(--group-color);
       border-right: 2px solid var(--group-color);
@@ -302,13 +300,13 @@
     box-shadow: 0 -1px 2px rgba(0,0,0,0.05);
 
     &.is-grouped {
-        // Group specific active style: colorful border
-        border-top: 2px solid var(--group-color);
-        border-left: 2px solid var(--group-color);
-        border-right: 2px solid var(--group-color);
-        z-index: 16;
+      // Group specific active style: colorful border
+      border-top: 2px solid var(--group-color);
+      border-left: 2px solid var(--group-color);
+      border-right: 2px solid var(--group-color);
+      z-index: 16;
     }
-    
+
     .connector-line { 
       display: none;
     }
@@ -337,17 +335,6 @@
       right: -10px;
       border-bottom-left-radius: 10px;
       box-shadow: -5px 5px 0 5px var(--toolbar-bg);
-    }
-
-    &.is-grouped {
-      &::before {
-        border-right: 2px solid var(--group-color);
-        border-bottom: 2px solid var(--group-color);
-      }
-      &::after {
-        border-left: 2px solid var(--group-color);
-        border-bottom: 2px solid var(--group-color);
-      }
     }
   }
 }

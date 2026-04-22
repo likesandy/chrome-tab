@@ -428,7 +428,7 @@ export default function App() {
                         ))}
                       </div>
                    ) : (
-                      <div className="chrome-tab-wrapper is-dragging-overlay" style={{ '--group-color': activeElement.color, width: '200px', pointerEvents: 'none' } as React.CSSProperties}>
+                      <div className="chrome-tab-wrapper is-dragging-overlay" style={{ '--group-color': activeElement.color, width: '100%', pointerEvents: 'none' } as React.CSSProperties}>
                         <div className={`chrome-tab active is-dragging-overlay ${activeElement.type === 'grouped-tab' ? 'is-grouped' : ''}`}>
                            <div className="connector-line" />
                            <div className="content">
